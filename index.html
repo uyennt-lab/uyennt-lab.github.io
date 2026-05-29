@@ -52,8 +52,7 @@
             <div id="screen-start" class="animate-fadeIn">
                 <div class="bg-white py-4 border-b border-slate-100">
                     <p class="text-xs font-bold text-slate-400 px-4 mb-2 uppercase tracking-wider">Chọn khung hình của bạn</p>
-                    <div id="frame-list" class="flex gap-4 px-4 overflow-x-auto no-scrollbar">
-                        </div>
+                    <div id="frame-list" class="flex gap-4 px-4 overflow-x-auto no-scrollbar"></div>
                 </div>
 
                 <div class="bg-white mt-2 border-y border-slate-100">
@@ -73,7 +72,7 @@
                     <div class="aspect-square bg-slate-100 flex flex-col items-center justify-center p-6 text-center border-y border-slate-50 relative">
                         <div class="text-5xl mb-3 animate-bounce">📸</div>
                         <h3 class="font-extrabold text-lg text-slate-800 px-4">Sẵn sàng bắt trọn khoảnh khắc?</h3>
-                        <p class="text-xs text-slate-400 mt-1 max-w-[240px]">Ảnh chụp giữ nguyên tỷ lệ gốc, chống dẹt mặt. Không làm mờ camera giúp bạn dễ dàng chỉnh dáng khi đếm ngược.</p>
+                        <p class="text-xs text-slate-400 mt-1 max-w-[240px]">Hệ thống tự động tương thích và tối ưu cam theo mọi thiết bị (iOS/Android/PC), chống lệch khung hình.</p>
                     </div>
 
                     <div class="p-3">
@@ -87,11 +86,8 @@
             <div id="screen-capture" class="p-4 hidden">
                 <div class="bg-slate-900 rounded-2xl overflow-hidden relative aspect-[4/3] shadow-inner border border-slate-800">
                     <video id="video" autoplay playsinline class="w-full h-full object-cover scale-x-[-1]"></video>
-                    
                     <div id="countdown" class="absolute inset-0 bg-black/10 flex items-center justify-center text-white text-7xl font-black drop-shadow-[0_4px_8px_rgba(0,0,0,0.4)] hidden">3</div>
-                    
                     <div id="flash" class="absolute inset-0 bg-white opacity-0 transition-opacity duration-75 pointer-events-none"></div>
-                    
                     <div class="absolute top-3 left-3 bg-red-500/90 text-white text-[10px] font-bold px-2.5 py-0.5 rounded-md tracking-wider flex items-center gap-1 shadow-sm">
                         <span class="w-1.5 h-1.5 bg-white rounded-full animate-ping"></span> REC LIVE
                     </div>
@@ -110,9 +106,7 @@
                     <canvas id="output-canvas" class="hidden"></canvas>
                     <img id="result-image" src="" alt="Kết quả" class="w-full h-auto rounded-lg shadow-inner border">
                 </div>
-
-                <p class="text-xs text-slate-400 mb-4 px-4">🎉 Ảnh đã được xử lý tự động thành công! Bạn có thể tải trực tiếp xuống máy.</p>
-
+                <p class="text-xs text-slate-400 mb-4 px-4">🎉 Ảnh đã tự động co giãn khớp khít với thiết bị của bạn!</p>
                 <div class="flex flex-col gap-2.5 max-w-[280px] mx-auto">
                     <a id="btn-download" href="#" download="hne_instagram_booth.png" class="w-full bg-[#0095f6] hover:bg-[#1877f2] text-white text-sm font-bold py-2.5 rounded-lg transition shadow-md flex items-center justify-center gap-1.5">
                         📥 Tải ảnh về máy
@@ -136,11 +130,12 @@
     </div>
 
     <script>
+        // Danh sách khung ảnh gốc đuôi .png của bạn
         const myFrames = [
-            { id: 'frame1', name: 'Khung số 1', file: '1.png', slotsCount: 3 },
-            { id: 'frame2', name: 'Khung số 2', file: '2.png', slotsCount: 4 },
-            { id: 'frame3', name: 'Khung số 3', file: '3.png', slotsCount: 4 },
-            { id: 'frame4', name: 'Khung số 4', file: '4.png', slotsCount: 4 }
+            { id: 'frame1', name: 'Xàm Xí 3 Ô', file: '1.png', slotsCount: 3 },
+            { id: 'frame2', name: 'HNE Cute 4 Ô', file: '2.png', slotsCount: 4 },
+            { id: 'frame3', name: 'Hello Hanoi 4 Ô', file: '3.png', slotsCount: 4 },
+            { id: 'frame4', name: 'Mèo Nón Lá 4 Ô', file: '4.png', slotsCount: 4 }
         ];
 
         let currentFrame = myFrames[0];
@@ -165,7 +160,6 @@
             myFrames.forEach((frame, index) => {
                 const item = document.createElement('div');
                 item.className = 'flex flex-col items-center flex-shrink-0 cursor-pointer select-none';
-                
                 item.innerHTML = `
                     <div class="story-ring w-16 h-16 rounded-full flex items-center justify-center transition-transform active:scale-95 ${index === 0 ? 'story-active' : 'border border-slate-200 p-[2px]' }">
                         <div class="w-full h-full bg-white rounded-full overflow-hidden border border-white">
@@ -174,7 +168,6 @@
                     </div>
                     <span class="text-[10px] font-semibold text-slate-600 mt-1 max-w-[64px] truncate">${frame.name}</span>
                 `;
-                
                 item.addEventListener('click', function() {
                     document.querySelectorAll('.story-ring').forEach(el => {
                         el.className = 'story-ring w-16 h-16 rounded-full flex items-center justify-center border border-slate-200 p-[2px]';
@@ -194,12 +187,8 @@
             screenStart.classList.add('hidden');
             screenCapture.classList.add('hidden');
             screenResult.classList.add('hidden');
-
-            if(type === 'feed') {
-                screenStart.classList.remove('hidden');
-            } else if(type === 'camera') {
-                openCamera();
-            }
+            if(type === 'feed') screenStart.classList.remove('hidden');
+            else if(type === 'camera') openCamera();
         }
 
         async function openCamera() {
@@ -209,14 +198,15 @@
             screenResult.classList.add('hidden');
             screenCapture.classList.remove('hidden');
             try {
+                // Yêu cầu cấu hình tối ưu để tương thích linh hoạt với nhiều dòng máy khác nhau
                 stream = await navigator.mediaDevices.getUserMedia({ 
-                    video: { facingMode: 'user', width: 640, height: 480 }, 
+                    video: { facingMode: 'user', width: { ideal: 1280 }, height: { ideal: 960 } }, 
                     audio: false 
                 });
                 video.srcObject = stream;
                 captureStatus.innerText = "Camera Sẵn Sàng";
             } catch (err) {
-                alert("Bạn vui lòng cấp quyền mở camera cho app nha!");
+                alert("Bạn vui lòng cấp quyền camera nha!");
                 console.error(err);
             }
         }
@@ -273,16 +263,19 @@
 
         function capturePose() {
             const tempCanvas = document.createElement('canvas');
-            tempCanvas.width = 640;
-            tempCanvas.height = 480;
+            // Lưu giữ nguyên độ phân giải gốc của camera thiết bị đó để không bị vỡ ảnh
+            tempCanvas.width = video.videoWidth || 640;
+            tempCanvas.height = video.videoHeight || 480;
             const ctx = tempCanvas.getContext('2d');
+            
+            // Lật gương ảnh để khi chụp ra giống hệt giao diện đang nhìn
             ctx.translate(tempCanvas.width, 0);
             ctx.scale(-1, 1);
             ctx.drawImage(video, 0, 0, tempCanvas.width, tempCanvas.height);
             capturedImages.push(tempCanvas.toDataURL('image/png'));
         }
 
-        // ĐÃ ĐIỀU CHỈNH LẠI TOÀN BỘ TỌA ĐỘ VÀ SỬA LỖI ĐÈ LAYER
+        // THUẬT TOÁN ĐỊNH VỊ LINH HOẠT - CHỐNG LỆCH DO KHÁC MÁY CHỤP
         function mergeImagesToFrame() {
             const ctx = canvas.getContext('2d');
             
@@ -294,30 +287,21 @@
             ctx.clearRect(0, 0, W, H);
             let slots = [];
 
-            // Đã căn chỉnh chính xác từng pixel cho mép viền ngoài và viền trong của khung ảnh bạn thiết kế
+            // Cấu hình tỷ lệ vùng ô chứa khung ảnh
             if (currentFrame.id === 'frame1') {
                 slots = [
-                    { x: W * 0.088, y: H * 0.198, w: W * 0.824, h: H * 0.155 },
-                    { x: W * 0.088, y: H * 0.440, w: W * 0.824, h: H * 0.155 },
-                    { x: W * 0.088, y: H * 0.681, w: W * 0.824, h: H * 0.155 }
+                    { x: W * 0.088, y: H * 0.198, w: W * 0.824, h: H * 0.153 },
+                    { x: W * 0.088, y: H * 0.440, w: W * 0.824, h: H * 0.153 },
+                    { x: W * 0.088, y: H * 0.681, w: W * 0.824, h: H * 0.153 }
                 ];
             } else if (currentFrame.id === 'frame2') {
                 slots = [
-                    { x: W * 0.143, y: H * 0.138, w: W * 0.712, h: H * 0.180 },
-                    { x: W * 0.118, y: H * 0.344, w: W * 0.764, h: H * 0.176 },
-                    { x: W * 0.142, y: H * 0.548, w: W * 0.716, h: H * 0.168 },
-                    { x: W * 0.118, y: H * 0.742, w: W * 0.764, h: H * 0.166 }
+                    { x: W * 0.140, y: H * 0.138, w: W * 0.718, h: H * 0.180 },
+                    { x: W * 0.116, y: H * 0.344, w: W * 0.768, h: H * 0.176 },
+                    { x: W * 0.140, y: H * 0.548, w: W * 0.720, h: H * 0.168 },
+                    { x: W * 0.116, y: H * 0.742, w: W * 0.768, h: H * 0.166 }
                 ];
-            } else if (currentFrame.id === 'frame3') {
-                // Khung Hello Hanoi: fix lỗi lệch trên, lòi sọc đen dưới
-                slots = [
-                    { x: W * 0.096, y: H * 0.177, w: W * 0.808, h: H * 0.153 },
-                    { x: W * 0.096, y: H * 0.355, w: W * 0.808, h: H * 0.153 },
-                    { x: W * 0.096, y: H * 0.534, w: W * 0.808, h: H * 0.153 },
-                    { x: W * 0.096, y: H * 0.712, w: W * 0.808, h: H * 0.153 }
-                ];
-            } else if (currentFrame.id === 'frame4') {
-                // Khung Mèo nón lá / Cờ đỏ sao vàng
+            } else if (currentFrame.id === 'frame3' || currentFrame.id === 'frame4') {
                 slots = [
                     { x: W * 0.096, y: H * 0.177, w: W * 0.808, h: H * 0.153 },
                     { x: W * 0.096, y: H * 0.355, w: W * 0.808, h: H * 0.153 },
@@ -336,10 +320,15 @@
                     
                     const inputWidth = img.width;
                     const inputHeight = img.height;
+                    
+                    // Tính toán tỷ lệ ô đích trên canvas khung hình
                     const targetRatio = slot.w / slot.h;
                     const inputRatio = inputWidth / inputHeight;
                     
                     let sx, sy, sw, sh;
+                    
+                    // THUẬT TOÁN ĐIỀU CHỈNH ĐỘNG (Tương đương Object-fit: cover của CSS)
+                    // Giúp tự động cắt cúp camera của từng máy (dù máy vuông hay máy dài) lấp đầy khít ô trống
                     if (inputRatio > targetRatio) {
                         sw = inputHeight * targetRatio;
                         sh = inputHeight;
@@ -352,11 +341,12 @@
                         sy = (inputHeight - sh) / 2;
                     }
                     
-                    // Vẽ ảnh người vào lớp dưới trước
+                    // Vẽ ảnh người xuống tầng nền bên dưới trước
                     ctx.drawImage(img, sx, sy, sw, sh, slot.x, slot.y, slot.w, slot.h);
 
-                    // Khi ảnh người cuối cùng load xong, dán đè khung .png lên trên
+                    // Khi tất cả ảnh của các lượt chụp đã vẽ xong xuôi
                     if (loadedCount === currentFrame.slotsCount) {
+                        // Đè tấm layer khung thiết kế .png lên trên cùng để che các góc thừa, tạo độ khít tuyệt đối
                         ctx.drawImage(frameImg, 0, 0, W, H);
 
                         const finalDataUrl = canvas.toDataURL('image/png');
